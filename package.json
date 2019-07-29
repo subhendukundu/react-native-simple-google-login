@@ -1,0 +1,33 @@
+{
+  "name": "react-native-simple-google-login",
+  "version": "0.0.1",
+  "description": "A `<GoogleLogin />` component for react-native no native code added light weight library to make user Google login. No setup, no linking required, use it like a component.",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/subhendukundu/react-native-simple-google-login.git"
+  },
+  "keywords": [
+    "google-api",
+    "react-native-component",
+    "react-component",
+    "react-native",
+    "google signin",
+    "google login",
+    "google+",
+    "oauth",
+    "oauth2",
+    "ios",
+    "android"
+  ],
+  "homepage": "https://github.com/subhendukundu/react-native-simple-google-login",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Subhendu Kundu",
+  "license": "MIT",
+  "dependencies": {
+    "@react-native-community/async-storage": "^1.6.1",
+    "react-native-webview": "^5.12.1"
+  }
+}
