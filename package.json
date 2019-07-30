@@ -22,7 +22,8 @@
   "homepage": "https://github.com/subhendukundu/react-native-simple-google-login",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "react-native link @react-native-community/async-storage && react-native link react-native-webview"
   },
   "author": "Subhendu Kundu",
   "license": "MIT",
