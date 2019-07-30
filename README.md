@@ -2,7 +2,7 @@
 
 ![npm (tag)](https://img.shields.io/npm/v/react-native-simple-google-login/latest) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com) ![GitHub top language](https://img.shields.io/github/languages/top/subhendukundu/react-native-simple-google-login) ![David](https://img.shields.io/david/subhendukundu/react-native-simple-google-login) [![publish size](https://badgen.net/packagephobia/publish/react-native-simple-google-login)](https://badgen.net/packagephobia/publish/react-native-simple-google-login)
 
-A `<GoogleLogin />` component for react-native no native code added light weight library to make user Google login. No setup, no linking required, use it like a component.
+A `<GoogleLogin />` component for react-native no native code added light weight library to make user Google login. No setup, no linking required,use it like a component.
 
 This module uses [Google OAuth2](https://developers.google.com/identity/protocols/OAuth2).
 
@@ -17,6 +17,17 @@ or
 ```sh
 yarn add react-native-simple-google-login
 ```
+
+## Linking
+
+As this module uses [react-native-webview](https://github.com/react-native-community/react-native-webview) [react-native-webview](https://github.com/react-native-community/async-storage) as dependencies, it's required to link them at the moment.
+
+```sh
+react-native link react-native-webview
+react-native link @react-native-community/async-storage
+```
+
+TODO: Making the them automate
 
 ### Setup Instructions
 
@@ -43,7 +54,7 @@ yarn add react-native-simple-google-login
 
 ```javascript
 import React, { useState } from 'react';
-import GoogleLogin, { userDetails, accessToken } from 'react-native-simple-google-login';
+import GoogleLogin, { getCurrentUser, getToken, getStatus, revokeAccess } from 'react-native-simple-google-login';
 
 export default function App() {
   const clientId = 'YOUR_CLIENT_ID';
@@ -68,8 +79,9 @@ export default function App() {
   }
 
   function _onPressDetailsButton() {
-    console.log(userDetails, 'stored user details in async storage');
-    console.log(accessToken, 'stored token details in async storage');
+    getCurrentUser().then(userDetails => {
+      console.log(userDetails, 'stored user details in async storage');
+    });
   }
 
   return (
@@ -92,6 +104,17 @@ export default function App() {
   )
 }
 ```
+
+## Docs
+
+Exposed data:
+userDetails, accessToken, sessionValid
+| name | desc | type | default
+| --- | --- | --- | --- |
+| `getCurrentUser` | Details of user logged in | Promise | `null`
+| `getToken` | Access token after logged in | Promise | `null`
+| `getStatus` | Returns a bool value which can be checked if the user is already logged in | Promise | `null`
+| `revokeAccess` | Remove your application from the user authorized applications. | Promise | `null`
 
 ## Dependency
 

@@ -1,6 +1,6 @@
 {
   "name": "react-native-simple-google-login",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A `<GoogleLogin />` component for react-native no native code added light weight library to make user Google login. No setup, no linking required, use it like a component.",
   "repository": {
     "type": "git",

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal } from 'react-native';
 import { WebView } from 'react-native-webview';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -45,7 +45,7 @@ class ReactNativeGoogleLogin {
         this.getUserDetailsFromAsyncStorage();
     }
 
-    async function checkAccessToken(token) {
+    checkAccessToken = async (token) => {
         return fetch(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${token}`).then(res => res.json());
     }
 
@@ -55,10 +55,29 @@ class ReactNativeGoogleLogin {
             if (data !== null) {
               this.userDetails = data;
             }
+            return data;
         } catch(e) {
             console.error('Error fetching toekn in async-storage');
         }
-    }
+    };
+
+    getCurrentUser = () => {
+      return this.getUserDetailsFromAsyncStorage();
+    };
+
+    getToken = () => {
+      return this.checkValidToken();
+    };
+
+    getStatus = async () => {
+      const data = await this.checkAccessToken(token);
+      return data.access_type && !data.error_description;
+    };
+
+    revokeAccess = async () => {
+      const token = await checkValidToken();
+      return await fetch(`https://accounts.google.com/o/oauth2/revoke?token=${token}`).then(res => res.json());
+    };
 
     checkValidToken = async () => {
         try {
@@ -70,24 +89,32 @@ class ReactNativeGoogleLogin {
                 this.sessionValid = true;
               }
             }
+            return token;
         } catch(e) {
             console.error('Error fetching toekn in async-storage');
         }
-    }
+    };
 
     storeData = async (type, data) => {
         try {
-          await AsyncStorage.setItem(, data);
+          await AsyncStorage.setItem(type, data);
         } catch (e) {
           console.error('Error saving toekn in async-storage');
         }
     }
 
-    GoogleLogin(props) {
-        const { credentialsDetails, getAccessToken, getUserDetails, scope } = props;
+    GoogleLogin = (props) => {
+        const { credentialsDetails, getAccessToken, getUserDetails, scope, startLogin } = props;
         const { redirectUrl = 'https://localhost', clientId } = credentialsDetails;
-        const loginState = this.accessToken && this.sessionValid;
+        const loginState = (this.accessToken && this.sessionValid);
         const [ isLoggedIn, setLoggedIn ] = useState(loginState);
+        useEffect(() => {
+          if(!loginState) {
+            setLoggedIn(!startLogin);
+          } else {
+            console.log('User is already logged in');
+          }
+        }, [!startLogin]);
         
         const urlParams = {
           response_type: 'code',
@@ -123,7 +150,7 @@ class ReactNativeGoogleLogin {
             });
             return response.json();
         }
-        function handleNavigation (url) {
+        handleNavigation = (url) => {
           const query = parse(url);
           if (query) {
             if (query.code) {
@@ -145,7 +172,7 @@ class ReactNativeGoogleLogin {
               }).catch(e => console.log(e));
             }
           }
-        }
+        };
         function onNavigationStateChange(e) {
           handleNavigation(e.url);
         }
@@ -177,13 +204,15 @@ class ReactNativeGoogleLogin {
 }
 const {
     GoogleLogin,
-    userDetails,
-    accessToken,
-    sessionValid
+    getCurrentUser,
+    getToken,
+    getStatus,
+    revokeAccess
 } = new ReactNativeGoogleLogin();
 export default GoogleLogin;
 export {
-    userDetails,
-    accessToken,
-    sessionValid
+    getCurrentUser,
+    getToken,
+    getStatus,
+    revokeAccess
 };
